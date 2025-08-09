@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>📋 Cardápio Digital</title>
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+      color: #222;
+      transition: background-color 0.3s, color 0.3s;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    body.dark {
+      background: #121212;
+      color: #eee;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 1.5rem;
+      background: #6200ee;
+      color: white;
+      flex-wrap: wrap;
+      box-shadow: 0 4px 10px rgba(98, 0, 238, 0.4);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    header h1 {
+      margin: 0;
+      font-weight: 700;
+      font-size: 1.8rem;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    button#toggleTheme {
+      background: transparent;
+      border: 2px solid white;
+      padding: 0.4rem 1rem;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      color: white;
+      transition: background-color 0.3s, color 0.3s;
+      user-select: none;
+    }
+
+    button#toggleTheme:hover {
+      background: white;
+      color: #6200ee;
+    }
+
+    main {
+      flex: 1;
+      padding: 1rem 1.5rem;
+      max-width: 960px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    #filtros {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #buscaProduto {
+      flex: 1;
+      min-width: 180px;
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+      border: 2px solid #6200ee;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    #buscaProduto:focus {
+      outline: none;
+      border-color: #3700b3;
+      box-shadow: 0 0 5px #3700b3;
+    }
+
+    #filtroCategoria {
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+      border: 2px solid #6200ee;
+      background: white;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: border-color 0.3s;
+      min-width: 150px;
+    }
+
+    body.dark #filtroCategoria {
+      background: #2a2a2a;
+      color: #eee;
+      border-color: #bb86fc;
+    }
+
+    #filtroCategoria:hover {
+      border-color: #3700b3;
+    }
+
+    .card {
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      padding: 1rem;
+      margin: 0.8rem;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      width: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: background-color 0.3s, box-shadow 0.3s;
+      user-select: none;
+      cursor: default;
+      position: relative;
+      min-height: 130px;
+    }
+
+    body.dark .card {
+      background: #2e2e2e;
+      border-color: #555;
+      box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+    }
+
+    .card h3 {
+      margin: 0.5rem 0 0.7rem 0;
+      font-weight: 600;
+      font-size: 1.1rem;
+      min-height: 48px;
+      line-height: 1.2;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .price {
+      font-weight: 700;
+      font-size: 1rem;
+      margin: 0.3rem 0 0.8rem 0;
+      color: #6200ee;
+    }
+
+    body.dark .price {
+      color: #bb86fc;
+    }
+
+    .btnAdicionar {
+      background: #6200ee;
+      color: white;
+      border: none;
+      padding: 0.45rem 1rem;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+    }
+
+    .btnAdicionar:disabled {
+      background: #999;
+      cursor: default;
+    }
+
+    .btnAdicionar:hover:not(:disabled) {
+      background: #3700b3;
+    }
+
+    #cardapio>section {
+      margin-bottom: 2.2rem;
+    }
+
+    #cardapio>section>h2 {
+      font-size: 1.5rem;
+      margin-left: 0.8rem;
+      margin-bottom: 0.8rem;
+      user-select: none;
+      border-bottom: 2px solid #6200ee;
+      padding-bottom: 0.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    body.dark #cardapio>section>h2 {
+      border-color: #bb86fc;
+    }
+
+    .produtos-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      gap: 0.8rem;
+    }
+
+    #carrinho {
+      max-width: 960px;
+      margin: 0 auto 2rem auto;
+      padding: 1rem 1.5rem;
+      background: #e0e0e0;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(98, 0, 238, 0.2);
+      user-select: none;
+      transition: background-color 0.3s;
+    }
+
+    body.dark #carrinho {
+      background: #333;
+      box-shadow: 0 4px 8px rgba(187, 134, 252, 0.5);
+    }
+
+    #carrinho h2 {
+      margin-top: 0;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 1.5rem;
+    }
+
+    #totalValor {
+      font-weight: 700;
+      font-size: 1.3rem;
+      color: #6200ee;
+      user-select: none;
+    }
+
+    body.dark #totalValor {
+      color: #bb86fc;
+    }
+
+    #itens-carrinho {
+      list-style-type: none;
+      padding-left: 0;
+      max-height: 200px;
+      overflow-y: auto;
+      margin: 0.5rem 0 1rem 0;
+      border-radius: 8px;
+      background: white;
+      border: 1px solid #bbb;
+      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.05);
+    }
+
+    body.dark #itens-carrinho {
+      background: #222;
+      border-color: #555;
+    }
+
+    #itens-carrinho li {
+      padding: 0.5rem 1rem;
+      border-bottom: 1px solid #ccc;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-size: 1rem;
+      user-select: none;
+    }
+
+    #itens-carrinho li:last-child {
+      border-bottom: none;
+    }
+
+    #itens-carrinho li:hover {
+      background: #6200ee;
+      color: white;
+    }
+
+    body.dark #itens-carrinho li:hover {
+      background: #bb86fc;
+      color: #121212;
+    }
+
+    #carrinhoButtons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      justify-content: center;
+      margin-top: 0.6rem;
+    }
+
+    #carrinhoButtons button {
+      flex: 1;
+      min-width: 140px;
+      padding: 0.6rem 0;
+      font-size: 1rem;
+      border-radius: 25px;
+      border: none;
+      background: #6200ee;
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.3s;
+      user-select: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    #carrinhoButtons button:hover {
+      background: #3700b3;
+    }
+
+    #nomeCliente {
+      width: 100%;
+      margin-top: 0.8rem;
+      padding: 0.6rem 1rem;
+      font-size: 1rem;
+      border-radius: 25px;
+      border: 2px solid #6200ee;
+      transition: border-color 0.3s;
+    }
+
+    #nomeCliente:focus {
+      outline: none;
+      border-color: #3700b3;
+      box-shadow: 0 0 6px #3700b3;
+    }
+
+    body.dark #nomeCliente {
+      background: #222;
+      color: #eee;
+      border-color: #bb86fc;
+    }
+
+    .quantidade-control {
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .quantidade-control button {
+      background: #6200ee;
+      border: none;
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 700;
+      user-select: none;
+      transition: background-color 0.3s;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      line-height: 1;
+      font-size: 1.2rem;
+      padding: 0;
+    }
+
+    .quantidade-control button:disabled {
+      background: #999;
+      cursor: default;
+    }
+
+    .quantidade-control button:hover:not(:disabled) {
+      background: #3700b3;
+    }
+
+    .quantidade-control span {
+      min-width: 20px;
+      text-align: center;
+      font-weight: 600;
+      font-size: 1rem;
+      user-select: none;
+    }
+
+    #pdfBtn,
+    #qrCodeContainer {
+      margin-top: 1rem;
+      text-align: center;
+    }
+
+    #pdfBtn button {
+      background: #03dac6;
+      color: #000;
+      font-weight: 700;
+      border-radius: 25px;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      user-select: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    #pdfBtn button:hover {
+      background: #018786;
+      color: white;
+    }
+
+    #qrcode {
+      margin: 0 auto;
+      width: 140px;
+      height: 140px;
+      user-select: none;
+    }
+
+    .added-message {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: #03dac6cc;
+      color: #000;
+      padding: 0.2rem 0.5rem;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      user-select: none;
+    }
+
+    .added-message.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #cupomContainer {
+      margin-top: 1rem;
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #cupomContainer input {
+      flex: 1;
+      min-width: 180px;
+      padding: 0.5rem 1rem;
+      border-radius: 25px;
+      border: 2px solid #6200ee;
+      font-size: 1rem;
+      transition: border-color 0.3s;
+    }
+
+    #cupomContainer input:focus {
+      outline: none;
+      border-color: #3700b3;
+      box-shadow: 0 0 5px #3700b3;
+    }
+
+    #btnAplicarCupom {
+      background: #03dac6;
+      color: #000;
+      font-weight: 700;
+      border-radius: 25px;
+      border: none;
+      padding: 0.5rem 1.2rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    #btnAplicarCupom:hover {
+      background: #018786;
+      color: white;
+    }
+
+    #taxaEntregaContainer {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.6rem;
+      user-select: none;
+    }
+
+    #taxaEntregaContainer label {
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    #taxaEntregaValor {
+      font-weight: 700;
+      color: #6200ee;
+    }
+
+    body.dark #taxaEntregaValor {
+      color: #bb86fc;
+    }
+
+  
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        gap: 0.6rem;
+      }
+
+      #cardapio>section {
+        margin-bottom: 1.5rem;
+      }
+
+      .produtos-grid {
+        justify-content: center;
+      }
+
+      .card {
+        width: 100%;
+        max-width: 320px;
+        margin: 0.5rem auto;
+      }
+
+      #carrinhoButtons button {
+        min-width: unset;
+        flex-grow: 1;
+      }
+
+      #cupomContainer {
+        flex-direction: column;
+        gap: 0.6rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header h1 {
+        font-size: 1.3rem;
+      }
+
+      #buscaProduto,
+      #filtroCategoria,
+      #cupomContainer input {
+        font-size: 1rem;
+      }
+
+      .card h3 {
+        font-size: 1rem;
+        min-height: 40px;
+      }
+
+      .price {
+        font-size: 0.9rem;
+      }
+
+      #carrinho {
+        font-size: 0.9rem;
+      }
+
+      #nomeCliente {
+        font-size: 1rem;
+      }
+
+      #itens-carrinho li {
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>📋 Cardápio Digital</h1>
+    <button id="toggleTheme" aria-label="Alternar modo escuro">🌓 Modo Escuro</button>
+  </header>
+
+  <main>
+    <section id="filtros" aria-label="Filtros de busca e categoria">
+      <input type="text" id="buscaProduto" placeholder="🔍 Buscar produtos..." aria-label="Buscar produtos" />
+      <select id="filtroCategoria" aria-label="Filtrar por categoria">
+        <option value="todas">Todas as categorias</option>
+      </select>
+    </section>
+
+    <section id="cardapio" aria-label="Cardápio de produtos">
+
+    </section>
+
+    <section id="carrinho" aria-label="Carrinho de compras">
+      <h2>🛒 Carrinho <span id="totalValor">(R$ 0,00)</span></h2>
+
+      <ul id="itens-carrinho" aria-live="polite" aria-relevant="additions removals"></ul>
+
+      <input type="text" id="nomeCliente" placeholder="Digite seu nome" aria-label="Nome do cliente" />
+
+      <div id="cupomContainer" aria-label="Campo para cupom de desconto">
+        <input type="text" id="inputCupom" placeholder="Digite cupom de desconto" aria-label="Cupom de desconto" />
+        <button id="btnAplicarCupom" aria-label="Aplicar cupom">🏷️ Aplicar Cupom</button>
+      </div>
+
+      <div id="taxaEntregaContainer">
+        <input type="checkbox" id="taxaEntrega" aria-label="Ativar taxa de entrega" />
+        <label for="taxaEntrega">Adicionar taxa de entrega de <span id="taxaEntregaValor">R$ 5,00</span></label>
+      </div>
+
+      <div id="carrinhoButtons">
+        <button id="btnLimparCarrinho" aria-label="Limpar carrinho">🗑️ Limpar Carrinho</button>
+        <button id="btnFinalizarCompra" aria-label="Finalizar compra">✅ Finalizar Compra</button>
+        <button id="btnEnviarWhatsapp" aria-label="Enviar pedido via WhatsApp" style="background:#25D366;">
+          📲 Enviar via WhatsApp
+        </button>
+      </div>
+
+      <div id="pdfBtn" aria-label="Gerar PDF">
+        <button id="gerarPdfBtn">📄 Gerar PDF do Pedido</button>
+      </div>
+
+      <div id="qrCodeContainer" aria-label="QR Code para o cardápio">
+        <p>📱 Escaneie o QR Code para acessar o cardápio no seu celular</p>
+        <canvas id="qrcode" role="img" aria-label="QR Code"></canvas>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <script>
+    (() => {
+
+      const produtos = [
+
+        { nome: 'Coxinha 🍗', categoria: 'Salgados', preco: 4.0 },
+        { nome: 'Kibe 🥙', categoria: 'Salgados', preco: 4.5 },
+        { nome: 'Risole 🥟', categoria: 'Salgados', preco: 4.0 },
+        { nome: 'Esfiha 🥮', categoria: 'Salgados', preco: 5.0 },
+        
+        { nome: 'Brigadeiro de Ninho/Oreo 🍫', categoria: 'Doces', preco: 1.5 },
+        { nome: 'Surpresa de Uva 🍇', categoria: 'Doces', preco: 1.5 },
+        { nome: 'Bem Casado 💍', categoria: 'Doces', preco: 1.5 },
+        { nome: 'Amendoim 🥜', categoria: 'Doces', preco: 1.5 },
+        { nome: 'Caixinha com 4 unidades 📦', categoria: 'Doces', preco: 6.0 },
+
+        { nome: 'Delícia de Abacaxi 🍍', categoria: 'Sobremesas', preco: 5.0 },
+        { nome: 'Mousse de Morango 🍓', categoria: 'Sobremesas', preco: 5.0 },
+        { nome: 'Bombom de Uva 🍬', categoria: 'Sobremesas', preco: 5.0 },
+        { nome: 'Bombom de Maracujá 🍬', categoria: 'Sobremesas', preco: 5.0 },
+        { nome: 'Bombom de Limão 🍬', categoria: 'Sobremesas', preco: 5.0 },
+        { nome: 'Bombom de Morango 🍬', categoria: 'Sobremesas', preco: 5.0 }
+      ];
+
+      const cuponsValidos = {
+        "DESCONTO10": 0.10, 
+        "PROMO5": 0.05     
+      };
+
+      let carrinho = {};
+      let cupomAtivo = null;
+      const taxaEntregaValor = 5.0;
+
+      const cardapioEl = document.getElementById('cardapio');
+      const filtroCategoriaEl = document.getElementById('filtroCategoria');
+      const buscaProdutoEl = document.getElementById('buscaProduto');
+      const itensCarrinhoEl = document.getElementById('itens-carrinho');
+      const totalValorEl = document.getElementById('totalValor');
+      const nomeClienteEl = document.getElementById('nomeCliente');
+      const btnLimparCarrinho = document.getElementById('btnLimparCarrinho');
+      const btnFinalizarCompra = document.getElementById('btnFinalizarCompra');
+      const btnAplicarCupom = document.getElementById('btnAplicarCupom');
+      const inputCupom = document.getElementById('inputCupom');
+      const taxaEntregaCheckbox = document.getElementById('taxaEntrega');
+      const toggleThemeBtn = document.getElementById('toggleTheme');
+      const gerarPdfBtn = document.getElementById('gerarPdfBtn');
+      const qrcodeCanvas = document.getElementById('qrcode');
+      const btnEnviarWhatsapp = document.getElementById('btnEnviarWhatsapp');
+
+      function agruparPorCategoria(produtos) {
+        const categorias = {};
+        produtos.forEach(prod => {
+          if (!categorias[prod.categoria]) {
+            categorias[prod.categoria] = [];
+          }
+          categorias[prod.categoria].push(prod);
+        });
+        return categorias;
+      }
+
+      function popularCategorias() {
+        const categorias = Array.from(new Set(produtos.map(p => p.categoria))).sort();
+        categorias.forEach(cat => {
+          const option = document.createElement('option');
+          option.value = cat;
+          option.textContent = cat;
+          filtroCategoriaEl.appendChild(option);
+        });
+      }
+
+      function renderizarProdutos() {
+        const busca = buscaProdutoEl.value.toLowerCase();
+        const categoriaFiltro = filtroCategoriaEl.value;
+        cardapioEl.innerHTML = '';
+
+        const produtosFiltrados = produtos.filter(prod => {
+          const nomeMatch = prod.nome.toLowerCase().includes(busca);
+          const categoriaMatch = categoriaFiltro === 'todas' || prod.categoria === categoriaFiltro;
+          return nomeMatch && categoriaMatch;
+        });
+
+        if (produtosFiltrados.length === 0) {
+          cardapioEl.innerHTML = `<p style="text-align:center; user-select:none;">😕 Nenhum produto encontrado.</p>`;
+          return;
+        }
+
+        const categoriasAgrupadas = agruparPorCategoria(produtosFiltrados);
+
+        for (const categoria in categoriasAgrupadas) {
+          const section = document.createElement('section');
+          const titulo = document.createElement('h2');
+          titulo.textContent = categoria;
+          titulo.setAttribute('tabindex', '0');
+          section.appendChild(titulo);
+
+          const grid = document.createElement('div');
+          grid.className = 'produtos-grid';
+
+          categoriasAgrupadas[categoria].forEach(prod => {
+            const card = document.createElement('article');
+            card.className = 'card';
+            card.setAttribute('tabindex', '0');
+            card.setAttribute('aria-label', `${prod.nome}, preço R$ ${prod.preco.toFixed(2)}`);
+
+            const nome = document.createElement('h3');
+            nome.textContent = prod.nome;
+
+            const preco = document.createElement('div');
+            preco.className = 'price';
+            preco.textContent = `R$ ${prod.preco.toFixed(2)}`;
+
+            const btnAdicionar = document.createElement('button');
+            btnAdicionar.className = 'btnAdicionar';
+            btnAdicionar.type = 'button';
+            btnAdicionar.innerHTML = '➕ Adicionar';
+            btnAdicionar.title = `Adicionar ${prod.nome} ao carrinho`;
+            btnAdicionar.addEventListener('click', () => {
+              adicionarAoCarrinho(prod.nome);
+              mostrarMensagemAdicionado(card);
+            });
+
+            const msgAdicionado = document.createElement('span');
+            msgAdicionado.className = 'added-message';
+            msgAdicionado.textContent = '✔️ Adicionado!';
+
+            card.appendChild(nome);
+            card.appendChild(preco);
+            card.appendChild(btnAdicionar);
+            card.appendChild(msgAdicionado);
+            grid.appendChild(card);
+          });
+
+          section.appendChild(grid);
+          cardapioEl.appendChild(section);
+        }
+      }
+
+      function mostrarMensagemAdicionado(card) {
+        const msg = card.querySelector('.added-message');
+        if (!msg) return;
+        msg.classList.add('show');
+        setTimeout(() => {
+          msg.classList.remove('show');
+        }, 1200);
+      }
+
+      function adicionarAoCarrinho(nomeProd) {
+        if (carrinho[nomeProd]) {
+          carrinho[nomeProd]++;
+        } else {
+          carrinho[nomeProd] = 1;
+        }
+        atualizarCarrinho();
+      }
+
+      function removerDoCarrinho(nomeProd) {
+        delete carrinho[nomeProd];
+        atualizarCarrinho();
+      }
+
+      function atualizarQuantidade(nomeProd, novaQtd) {
+        if (novaQtd <= 0) {
+          removerDoCarrinho(nomeProd);
+        } else {
+          carrinho[nomeProd] = novaQtd;
+        }
+        atualizarCarrinho();
+      }
+
+      function calcularTotal() {
+        let total = 0;
+        for (const nomeProd in carrinho) {
+          const produto = produtos.find(p => p.nome === nomeProd);
+          if (!produto) continue;
+          total += produto.preco * carrinho[nomeProd];
+        }
+
+        if (cupomAtivo && cuponsValidos[cupomAtivo]) {
+          total = total * (1 - cuponsValidos[cupomAtivo]);
+        }
+
+        if (taxaEntregaCheckbox.checked) {
+          total += taxaEntregaValor;
+        }
+
+        return total;
+      }
+
+
+      function atualizarCarrinho() {
+        itensCarrinhoEl.innerHTML = '';
+        const nomesProdutos = Object.keys(carrinho);
+        if (nomesProdutos.length === 0) {
+          itensCarrinhoEl.innerHTML = `<li style="text-align:center; user-select:none;">Seu carrinho está vazio.</li>`;
+          totalValorEl.textContent = `(R$ 0,00)`;
+          return;
+        }
+
+        nomesProdutos.forEach(nomeProd => {
+          const li = document.createElement('li');
+          const produto = produtos.find(p => p.nome === nomeProd);
+          const quantidade = carrinho[nomeProd];
+
+          li.setAttribute('tabindex', '0');
+          li.setAttribute('aria-label', `${quantidade} unidades de ${nomeProd}, preço unitário R$ ${produto.preco.toFixed(2)}`);
+
+          li.innerHTML = `
+            <span>${nomeProd}</span>
+            <div class="quantidade-control" aria-label="Controle de quantidade">
+              <button aria-label="Diminuir quantidade" class="diminuir">−</button>
+              <span>${quantidade}</span>
+              <button aria-label="Aumentar quantidade" class="aumentar">+</button>
+            </div>
+            <span>R$ ${(produto.preco * quantidade).toFixed(2)}</span>
+          `;
+
+          li.querySelector('.diminuir').addEventListener('click', () => {
+            atualizarQuantidade(nomeProd, quantidade - 1);
+          });
+
+          li.querySelector('.aumentar').addEventListener('click', () => {
+            atualizarQuantidade(nomeProd, quantidade + 1);
+          });
+
+          itensCarrinhoEl.appendChild(li);
+        });
+
+        const totalCalculado = calcularTotal();
+        totalValorEl.textContent = `(R$ ${totalCalculado.toFixed(2)})`;
+      }
+
+      function aplicarCupom() {
+        const cupom = inputCupom.value.trim().toUpperCase();
+        if (!cupom) {
+          alert('Digite um cupom válido.');
+          return;
+        }
+        if (!cuponsValidos[cupom]) {
+          alert('Cupom inválido ou expirado.');
+          return;
+        }
+        cupomAtivo = cupom;
+        alert(`Cupom "${cupom}" aplicado com sucesso!`);
+        atualizarCarrinho();
+        inputCupom.value = '';
+      }
+
+      function limparCarrinho() {
+        if (!confirm('Tem certeza que deseja limpar o carrinho?')) return;
+        carrinho = {};
+        cupomAtivo = null;
+        taxaEntregaCheckbox.checked = false;
+        inputCupom.value = '';
+        atualizarCarrinho();
+      }
+
+      function finalizarCompra() {
+        if (Object.keys(carrinho).length === 0) {
+          alert('Seu carrinho está vazio!');
+          return;
+        }
+        if (!nomeClienteEl.value.trim()) {
+          alert('Por favor, digite seu nome antes de finalizar.');
+          nomeClienteEl.focus();
+          return;
+        }
+        alert(`Obrigado pela compra, ${nomeClienteEl.value.trim()}! Total: R$ ${calcularTotal().toFixed(2)}`);
+      }
+
+      async function gerarPDF() {
+        if (Object.keys(carrinho).length === 0) {
+          alert('Seu carrinho está vazio!');
+          return;
+        }
+        const {
+          jsPDF
+        } = window.jspdf;
+        const doc = new jsPDF();
+
+        doc.setFontSize(16);
+        doc.text('Pedido do Cardápio Digital', 14, 20);
+        doc.setFontSize(12);
+        doc.text(`Cliente: ${nomeClienteEl.value.trim() || 'Não informado'}`, 14, 30);
+
+        let yPos = 40;
+        doc.text('Itens:', 14, yPos);
+        yPos += 8;
+
+        for (const nomeProd in carrinho) {
+          const produto = produtos.find(p => p.nome === nomeProd);
+          const qtd = carrinho[nomeProd];
+          const line = `${qtd}x ${nomeProd} - R$ ${(produto.preco * qtd).toFixed(2)}`;
+          doc.text(line, 20, yPos);
+          yPos += 8;
+          if (yPos > 280) {
+            doc.addPage();
+            yPos = 20;
+          }
+        }
+
+        yPos += 8;
+        if (cupomAtivo) {
+          doc.text(`Cupom aplicado: ${cupomAtivo}`, 14, yPos);
+          yPos += 8;
+        }
+
+        if (taxaEntregaCheckbox.checked) {
+          doc.text(`Taxa de entrega: R$ ${taxaEntregaValor.toFixed(2)}`, 14, yPos);
+          yPos += 8;
+        }
+
+        doc.setFontSize(14);
+        doc.text(`Total: R$ ${calcularTotal().toFixed(2)}`, 14, yPos + 10);
+
+        doc.save('pedido_cardapio.pdf');
+      }
+
+      function toggleTema() {
+        document.body.classList.toggle('dark');
+        if (document.body.classList.contains('dark')) {
+          toggleThemeBtn.textContent = '🌞 Modo Claro';
+        } else {
+          toggleThemeBtn.textContent = '🌓 Modo Escuro';
+        }
+      }
+
+      function gerarQRCode() {
+        const url = window.location.href;
+        QRCode.toCanvas(qrcodeCanvas, url, {
+          width: 140
+        }, function (error) {
+          if (error) console.error(error);
+        });
+      }
+
+      function enviarViaWhatsapp() {
+        if (Object.keys(carrinho).length === 0) {
+          alert('Seu carrinho está vazio.');
+          return;
+        }
+        if (!nomeClienteEl.value.trim()) {
+          alert('Por favor, digite seu nome antes de enviar.');
+          nomeClienteEl.focus();
+          return;
+        }
+
+        let mensagem = `🛒 *Pedido do Cardápio Digital*\n\n*Cliente:* ${nomeClienteEl.value.trim()}\n\n*Itens:*\n`;
+
+        for (const nomeProd in carrinho) {
+          const produto = produtos.find(p => p.nome === nomeProd);
+          const qtd = carrinho[nomeProd];
+          mensagem += `- ${qtd}x ${nomeProd} - R$ ${(produto.preco * qtd).toFixed(2)}\n`;
+        }
+
+        if (cupomAtivo) {
+          mensagem += `\n*Cupom aplicado:* ${cupomAtivo}\n`;
+        }
+
+        if (taxaEntregaCheckbox.checked) {
+          mensagem += `*Taxa de entrega:* R$ ${taxaEntregaValor.toFixed(2)}\n`;
+        }
+
+        mensagem += `\n*Total:* R$ ${calcularTotal().toFixed(2)}\n\n📱 Enviado via Cardápio Digital`;
+
+
+        const numeroWhatsApp = '';
+        if (!numeroWhatsApp) {
+          alert('Número de WhatsApp não configurado. Por favor, configure o número no código.');
+          return;
+        }
+
+        const urlWhatsapp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+        window.open(urlWhatsapp, '_blank');
+      }
+
+
+      buscaProdutoEl.addEventListener('input', renderizarProdutos);
+      filtroCategoriaEl.addEventListener('change', renderizarProdutos);
+      btnAplicarCupom.addEventListener('click', aplicarCupom);
+      btnLimparCarrinho.addEventListener('click', limparCarrinho);
+      btnFinalizarCompra.addEventListener('click', finalizarCompra);
+      taxaEntregaCheckbox.addEventListener('change', atualizarCarrinho);
+      toggleThemeBtn.addEventListener('click', toggleTema);
+      gerarPdfBtn.addEventListener('click', gerarPDF);
+      btnEnviarWhatsapp.addEventListener('click', enviarViaWhatsapp);
+
+      popularCategorias();
+      renderizarProdutos();
+      atualizarCarrinho();
+      gerarQRCode();
+    })();
+  </script>
+</body>
+
+</html>
