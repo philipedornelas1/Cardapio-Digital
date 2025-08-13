@@ -18,10 +18,12 @@
       padding: 0;
       background: #f9f9f9;
       color: #222;
-      transition: background-color 0.3s, color 0.3s;
+      transition: background-color 0.3s ease, color 0.3s ease;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      align-items: center;
+      padding-bottom: 2rem;
     }
 
     body.dark {
@@ -37,10 +39,13 @@
       background: #6200ee;
       color: white;
       flex-wrap: wrap;
-      box-shadow: 0 4px 10px rgba(98, 0, 238, 0.4);
+      box-shadow: 0 4px 8px rgba(98, 0, 238, 0.3);
       position: sticky;
       top: 0;
       z-index: 10;
+      width: 100%;
+      max-width: 960px;
+      border-radius: 0 0 10px 10px;
     }
 
     header h1 {
@@ -56,33 +61,44 @@
     button#toggleTheme {
       background: transparent;
       border: 2px solid white;
-      padding: 0.4rem 1rem;
-      border-radius: 25px;
+      padding: 0.4rem 0.9rem;
+      border-radius: 8px;
       font-weight: 600;
       cursor: pointer;
       color: white;
-      transition: background-color 0.3s, color 0.3s;
+      transition: background-color 0.3s ease, color 0.3s ease;
       user-select: none;
+      box-shadow: 0 2px 6px rgba(255, 255, 255, 0.4);
     }
 
     button#toggleTheme:hover {
       background: white;
       color: #6200ee;
+      box-shadow: 0 4px 12px rgba(98, 0, 238, 0.6);
     }
 
     main {
       flex: 1;
       padding: 1rem 1.5rem;
       max-width: 960px;
-      margin: 0 auto;
+      margin: 1rem auto 0;
       width: 100%;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body.dark main {
+      background: #222;
+      box-shadow: 0 6px 15px rgba(255, 255, 255, 0.1);
     }
 
     #filtros {
       display: flex;
       flex-wrap: wrap;
       gap: 1rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
       align-items: center;
       justify-content: center;
     }
@@ -90,52 +106,56 @@
     #buscaProduto {
       flex: 1;
       min-width: 180px;
-      padding: 0.5rem 1rem;
-      border-radius: 25px;
-      border: 2px solid #6200ee;
+      padding: 0.6rem 1rem;
+      border-radius: 8px;
+      border: 2px solid #ccc;
       font-size: 1rem;
-      transition: border-color 0.3s;
+      transition: border-color 0.3s ease;
+      box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
     }
 
     #buscaProduto:focus {
       outline: none;
-      border-color: #3700b3;
-      box-shadow: 0 0 5px #3700b3;
+      border-color: #6200ee;
+      box-shadow: 0 0 8px #6200eeaa;
+      background-color: #fff;
     }
 
     #filtroCategoria {
       padding: 0.5rem 1rem;
-      border-radius: 25px;
-      border: 2px solid #6200ee;
+      border-radius: 8px;
+      border: 2px solid #ccc;
       background: white;
       font-size: 1rem;
       cursor: pointer;
-      transition: border-color 0.3s;
-      min-width: 150px;
+      transition: border-color 0.3s ease;
+      min-width: 160px;
+    }
+
+    #filtroCategoria:focus {
+      border-color: #6200ee;
+      outline: none;
+      box-shadow: 0 0 8px #6200eeaa;
     }
 
     body.dark #filtroCategoria {
       background: #2a2a2a;
       color: #eee;
-      border-color: #bb86fc;
-    }
-
-    #filtroCategoria:hover {
-      border-color: #3700b3;
+      border-color: #555;
     }
 
     .card {
-      border: 1px solid #ccc;
+      border: 1px solid #ddd;
       border-radius: 12px;
       padding: 1rem;
       margin: 0.8rem;
       background: white;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.07);
       width: 220px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      transition: background-color 0.3s, box-shadow 0.3s;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
       user-select: none;
       cursor: default;
       position: relative;
@@ -144,12 +164,25 @@
 
     body.dark .card {
       background: #2e2e2e;
-      border-color: #555;
-      box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1);
+      border-color: #444;
+      box-shadow: 0 3px 6px rgba(255, 255, 255, 0.1);
+    }
+
+    .card:hover,
+    .card:focus-within {
+      box-shadow: 0 8px 20px rgba(98, 0, 238, 0.3);
+      background-color: #f0eaff;
+      outline: none;
+    }
+
+    body.dark .card:hover,
+    body.dark .card:focus-within {
+      background-color: #3a276a;
+      box-shadow: 0 8px 20px rgba(187, 134, 252, 0.6);
     }
 
     .card h3 {
-      margin: 0.5rem 0 0.7rem 0;
+      margin: 0.5rem 0;
       font-weight: 600;
       font-size: 1.1rem;
       min-height: 48px;
@@ -162,7 +195,7 @@
     .price {
       font-weight: 700;
       font-size: 1rem;
-      margin: 0.3rem 0 0.8rem 0;
+      margin: 0.3rem 0;
       color: #6200ee;
     }
 
@@ -174,45 +207,53 @@
       background: #6200ee;
       color: white;
       border: none;
-      padding: 0.45rem 1rem;
-      border-radius: 25px;
+      padding: 0.5rem 0.8rem;
+      border-radius: 10px;
       font-weight: 600;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
       user-select: none;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 0.4rem;
+      font-size: 0.95rem;
+      box-shadow: 0 3px 8px rgba(98, 0, 238, 0.4);
     }
 
     .btnAdicionar:disabled {
       background: #999;
       cursor: default;
+      box-shadow: none;
     }
 
-    .btnAdicionar:hover:not(:disabled) {
+    .btnAdicionar:hover:not(:disabled),
+    .btnAdicionar:focus:not(:disabled) {
       background: #3700b3;
+      box-shadow: 0 6px 18px rgba(55, 0, 179, 0.7);
+      outline: none;
     }
 
     #cardapio>section {
-      margin-bottom: 2.2rem;
+      margin-bottom: 2rem;
     }
 
-    #cardapio>section>h2 {
+    #cardapio>section h2 {
       font-size: 1.5rem;
-      margin-left: 0.8rem;
-      margin-bottom: 0.8rem;
+      margin-left: 0.2rem;
+      margin-bottom: 1rem;
       user-select: none;
       border-bottom: 2px solid #6200ee;
-      padding-bottom: 0.2rem;
+      padding-bottom: 0.3rem;
       display: flex;
       align-items: center;
       gap: 0.6rem;
+      color: #6200ee;
     }
 
-    body.dark #cardapio>section>h2 {
+    body.dark #cardapio>section h2 {
       border-color: #bb86fc;
+      color: #bb86fc;
     }
 
     .produtos-grid {
@@ -224,18 +265,18 @@
 
     #carrinho {
       max-width: 960px;
-      margin: 0 auto 2rem auto;
+      margin: 0 auto;
       padding: 1rem 1.5rem;
-      background: #e0e0e0;
+      background: #e0e0ff;
       border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(98, 0, 238, 0.2);
+      box-shadow: 0 4px 12px rgba(98, 0, 238, 0.2);
       user-select: none;
-      transition: background-color 0.3s;
+      transition: background-color 0.3s ease;
     }
 
     body.dark #carrinho {
-      background: #333;
-      box-shadow: 0 4px 8px rgba(187, 134, 252, 0.5);
+      background: #332e66;
+      box-shadow: 0 4px 12px rgba(187, 134, 252, 0.3);
     }
 
     #carrinho h2 {
@@ -245,6 +286,11 @@
       align-items: center;
       gap: 0.6rem;
       font-size: 1.5rem;
+      color: #3700b3;
+    }
+
+    body.dark #carrinho h2 {
+      color: #bb86fc;
     }
 
     #totalValor {
@@ -261,28 +307,29 @@
     #itens-carrinho {
       list-style-type: none;
       padding-left: 0;
-      max-height: 200px;
+      max-height: 220px;
       overflow-y: auto;
-      margin: 0.5rem 0 1rem 0;
-      border-radius: 8px;
+      margin: 0.5rem 0;
+      border-radius: 10px;
       background: white;
-      border: 1px solid #bbb;
-      box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.05);
+      border: 1px solid #ccc;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
     body.dark #itens-carrinho {
       background: #222;
-      border-color: #555;
+      border-color: #444;
     }
 
     #itens-carrinho li {
-      padding: 0.5rem 1rem;
-      border-bottom: 1px solid #ccc;
+      padding: 0.6rem 1rem;
+      border-bottom: 1px solid #ddd;
       display: flex;
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: background-color 0.3s ease;
       font-size: 1rem;
       user-select: none;
     }
@@ -291,67 +338,15 @@
       border-bottom: none;
     }
 
-    #itens-carrinho li:hover {
-      background: #6200ee;
-      color: white;
-    }
-
-    body.dark #itens-carrinho li:hover {
-      background: #bb86fc;
-      color: #121212;
-    }
-
-    #carrinhoButtons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.6rem;
-      justify-content: center;
-      margin-top: 0.6rem;
-    }
-
-    #carrinhoButtons button {
-      flex: 1;
-      min-width: 140px;
-      padding: 0.6rem 0;
-      font-size: 1rem;
-      border-radius: 25px;
-      border: none;
-      background: #6200ee;
-      color: white;
-      cursor: pointer;
-      font-weight: 600;
-      transition: background-color 0.3s;
-      user-select: none;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    #carrinhoButtons button:hover {
-      background: #3700b3;
-    }
-
-    #nomeCliente {
-      width: 100%;
-      margin-top: 0.8rem;
-      padding: 0.6rem 1rem;
-      font-size: 1rem;
-      border-radius: 25px;
-      border: 2px solid #6200ee;
-      transition: border-color 0.3s;
-    }
-
-    #nomeCliente:focus {
+    #itens-carrinho li:hover,
+    #itens-carrinho li:focus {
+      background: #6200ee22;
       outline: none;
-      border-color: #3700b3;
-      box-shadow: 0 0 6px #3700b3;
     }
 
-    body.dark #nomeCliente {
-      background: #222;
-      color: #eee;
-      border-color: #bb86fc;
+    body.dark #itens-carrinho li:hover,
+    body.dark #itens-carrinho li:focus {
+      background: #bb86fc22;
     }
 
     .quantidade-control {
@@ -364,13 +359,13 @@
       background: #6200ee;
       border: none;
       color: white;
-      width: 24px;
-      height: 24px;
-      border-radius: 4px;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
       cursor: pointer;
       font-weight: 700;
       user-select: none;
-      transition: background-color 0.3s;
+      transition: background-color 0.3s ease;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -384,171 +379,163 @@
       cursor: default;
     }
 
-    .quantidade-control button:hover:not(:disabled) {
+    .quantidade-control button:hover:not(:disabled),
+    .quantidade-control button:focus:not(:disabled) {
       background: #3700b3;
+      outline: none;
     }
 
     .quantidade-control span {
-      min-width: 20px;
+      min-width: 22px;
       text-align: center;
       font-weight: 600;
       font-size: 1rem;
       user-select: none;
     }
 
-    #pdfBtn,
-    #qrCodeContainer {
-      margin-top: 1rem;
-      text-align: center;
+    #nomeCliente {
+      width: 100%;
+      margin-top: 0.8rem;
+      padding: 0.6rem 1rem;
+      font-size: 1rem;
+      border-radius: 10px;
+      border: 2px solid #ccc;
+      transition: border-color 0.3s ease;
     }
 
-    #pdfBtn button {
-      background: #03dac6;
-      color: #000;
-      font-weight: 700;
-      border-radius: 25px;
+    #nomeCliente:focus {
+      outline: none;
+      border-color: #6200ee;
+      box-shadow: 0 0 8px #6200eeaa;
+      background-color: #fff;
+    }
+
+    body.dark #nomeCliente {
+      background: #222;
+      color: #eee;
+      border-color: #555;
+    }
+
+    #carrinhoButtons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      justify-content: flex-end;
+      margin-top: 0.6rem;
+    }
+
+    #carrinhoButtons button {
+      flex: 1;
+      min-width: 140px;
+      padding: 0.6rem;
+      font-size: 1rem;
+      border-radius: 10px;
       border: none;
-      padding: 0.6rem 1.2rem;
+      background: #6200ee;
+      color: white;
       cursor: pointer;
-      transition: background-color 0.3s;
+      font-weight: 600;
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
       user-select: none;
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.5rem;
+      box-shadow: 0 3px 8px rgba(98, 0, 238, 0.4);
     }
 
-    #pdfBtn button:hover {
-      background: #018786;
-      color: white;
+    #carrinhoButtons button:hover,
+    #carrinhoButtons button:focus {
+      background: #3700b3;
+      box-shadow: 0 6px 18px rgba(55, 0, 179, 0.7);
+      outline: none;
+    }
+
+    #qrCodeContainer {
+      margin-top: 1.5rem;
+      text-align: center;
+      user-select: none;
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    body.dark #qrCodeContainer {
+      color: #bbb;
     }
 
     #qrcode {
-      margin: 0 auto;
+      margin: 0.8rem auto 0;
       width: 140px;
       height: 140px;
       user-select: none;
+      border-radius: 12px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+      transition: box-shadow 0.3s ease;
     }
 
-    .added-message {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      background: #03dac6cc;
-      color: #000;
-      padding: 0.2rem 0.5rem;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 0.85rem;
+    body.dark #qrcode {
+      box-shadow: 0 3px 10px rgba(255, 255, 255, 0.2);
+    }
+
+    #popupOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.4s ease;
-      user-select: none;
+      transition: opacity 0.3s ease;
     }
 
-    .added-message.show {
+    #popupOverlay.active {
       opacity: 1;
       pointer-events: auto;
     }
 
-    #cupomContainer {
-      margin-top: 1rem;
-      display: flex;
-      gap: 0.8rem;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-    }
-
-    #cupomContainer input {
-      flex: 1;
-      min-width: 180px;
-      padding: 0.5rem 1rem;
-      border-radius: 25px;
-      border: 2px solid #6200ee;
-      font-size: 1rem;
-      transition: border-color 0.3s;
-    }
-
-    #cupomContainer input:focus {
-      outline: none;
-      border-color: #3700b3;
-      box-shadow: 0 0 5px #3700b3;
-    }
-
-    #btnAplicarCupom {
-      background: #03dac6;
-      color: #000;
-      font-weight: 700;
-      border-radius: 25px;
-      border: none;
-      padding: 0.5rem 1.2rem;
-      cursor: pointer;
-      transition: background-color 0.3s;
-      user-select: none;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    #btnAplicarCupom:hover {
-      background: #018786;
-      color: white;
-    }
-
-    #taxaEntregaContainer {
-      margin-top: 1rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 0.6rem;
-      user-select: none;
-    }
-
-    #taxaEntregaContainer label {
-      cursor: pointer;
+    #popupBox {
+      background: white;
+      padding: 2rem 2.5rem;
+      border-radius: 12px;
+      max-width: 360px;
+      width: 90%;
+      box-shadow: 0 10px 30px rgba(98, 0, 238, 0.3);
+      text-align: center;
+      color: #333;
       font-weight: 600;
+      font-size: 1.1rem;
+      user-select: none;
+      position: relative;
+      transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    #taxaEntregaValor {
+    body.dark #popupBox {
+      background: #2e2e2e;
+      color: #eee;
+      box-shadow: 0 10px 30px rgba(187, 134, 252, 0.6);
+    }
+
+    #popupBox button {
+      margin-top: 1.4rem;
+      padding: 0.5rem 1.2rem;
+      border-radius: 8px;
+      border: none;
+      background: #6200ee;
+      color: white;
       font-weight: 700;
-      color: #6200ee;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(98, 0, 238, 0.5);
+      transition: background-color 0.3s ease;
+      user-select: none;
     }
 
-    body.dark #taxaEntregaValor {
-      color: #bb86fc;
-    }
-
-  
-    @media (max-width: 768px) {
-      header {
-        flex-direction: column;
-        gap: 0.6rem;
-      }
-
-      #cardapio>section {
-        margin-bottom: 1.5rem;
-      }
-
-      .produtos-grid {
-        justify-content: center;
-      }
-
-      .card {
-        width: 100%;
-        max-width: 320px;
-        margin: 0.5rem auto;
-      }
-
-      #carrinhoButtons button {
-        min-width: unset;
-        flex-grow: 1;
-      }
-
-      #cupomContainer {
-        flex-direction: column;
-        gap: 0.6rem;
-      }
+    #popupBox button:hover,
+    #popupBox button:focus {
+      background: #3700b3;
+      outline: none;
+      box-shadow: 0 6px 18px rgba(55, 0, 179, 0.7);
     }
 
     @media (max-width: 480px) {
@@ -557,8 +544,7 @@
       }
 
       #buscaProduto,
-      #filtroCategoria,
-      #cupomContainer input {
+      #filtroCategoria {
         font-size: 1rem;
       }
 
@@ -581,6 +567,11 @@
 
       #itens-carrinho li {
         font-size: 0.9rem;
+      }
+
+      .btnAdicionar {
+        width: 100%;
+        justify-content: center;
       }
     }
   </style>
@@ -607,19 +598,11 @@
     <section id="carrinho" aria-label="Carrinho de compras">
       <h2>🛒 Carrinho <span id="totalValor">(R$ 0,00)</span></h2>
 
-      <ul id="itens-carrinho" aria-live="polite" aria-relevant="additions removals"></ul>
+      <ul id="itens-carrinho" aria-live="polite" aria-relevant="additions removals">
+
+      </ul>
 
       <input type="text" id="nomeCliente" placeholder="Digite seu nome" aria-label="Nome do cliente" />
-
-      <div id="cupomContainer" aria-label="Campo para cupom de desconto">
-        <input type="text" id="inputCupom" placeholder="Digite cupom de desconto" aria-label="Cupom de desconto" />
-        <button id="btnAplicarCupom" aria-label="Aplicar cupom">🏷️ Aplicar Cupom</button>
-      </div>
-
-      <div id="taxaEntregaContainer">
-        <input type="checkbox" id="taxaEntrega" aria-label="Ativar taxa de entrega" />
-        <label for="taxaEntrega">Adicionar taxa de entrega de <span id="taxaEntregaValor">R$ 5,00</span></label>
-      </div>
 
       <div id="carrinhoButtons">
         <button id="btnLimparCarrinho" aria-label="Limpar carrinho">🗑️ Limpar Carrinho</button>
@@ -629,10 +612,6 @@
         </button>
       </div>
 
-      <div id="pdfBtn" aria-label="Gerar PDF">
-        <button id="gerarPdfBtn">📄 Gerar PDF do Pedido</button>
-      </div>
-
       <div id="qrCodeContainer" aria-label="QR Code para o cardápio">
         <p>📱 Escaneie o QR Code para acessar o cardápio no seu celular</p>
         <canvas id="qrcode" role="img" aria-label="QR Code"></canvas>
@@ -640,41 +619,37 @@
     </section>
   </main>
 
+  <div id="popupOverlay" role="alertdialog" aria-modal="true" aria-labelledby="popupMessage" tabindex="-1">
+    <div id="popupBox">
+      <p id="popupMessage"></p>
+      <button id="popupCloseBtn" aria-label="Fechar mensagem">OK</button>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <script>
     (() => {
-
       const produtos = [
+        { nome: '🍤 Empada de Camarão', categoria: 'Salgados', preco: 3.0 },
+        { nome: '🍗 Empada de Frango', categoria: 'Salgados', preco: 3.0 },
+        { nome: '🧀 Salgadinho de Queijo', categoria: 'Salgados', preco: 5.0 },
 
-        { nome: 'Coxinha 🍗', categoria: 'Salgados', preco: 4.0 },
-        { nome: 'Kibe 🥙', categoria: 'Salgados', preco: 4.5 },
-        { nome: 'Risole 🥟', categoria: 'Salgados', preco: 4.0 },
-        { nome: 'Esfiha 🥮', categoria: 'Salgados', preco: 5.0 },
-        
-        { nome: 'Brigadeiro de Ninho/Oreo 🍫', categoria: 'Doces', preco: 1.5 },
-        { nome: 'Surpresa de Uva 🍇', categoria: 'Doces', preco: 1.5 },
-        { nome: 'Bem Casado 💍', categoria: 'Doces', preco: 1.5 },
-        { nome: 'Amendoim 🥜', categoria: 'Doces', preco: 1.5 },
-        { nome: 'Caixinha com 4 unidades 📦', categoria: 'Doces', preco: 6.0 },
+        { nome: '🍫 Brigadeiro de Ninho/Oreo', categoria: 'Doces', preco: 1.5 },
+        { nome: '🍇 Surpresa de Uva', categoria: 'Doces', preco: 1.5 },
+        { nome: '💍 Bem Casado', categoria: 'Doces', preco: 1.5 },
+        { nome: '🥜 Docinho de Amendoim', categoria: 'Doces', preco: 1.5 },
+        { nome: '📦 Caixinha com 4 unidades', categoria: 'Doces', preco: 6.0 },
 
-        { nome: 'Delícia de Abacaxi 🍍', categoria: 'Sobremesas', preco: 5.0 },
-        { nome: 'Mousse de Morango 🍓', categoria: 'Sobremesas', preco: 5.0 },
-        { nome: 'Bombom de Uva 🍬', categoria: 'Sobremesas', preco: 5.0 },
-        { nome: 'Bombom de Maracujá 🍬', categoria: 'Sobremesas', preco: 5.0 },
-        { nome: 'Bombom de Limão 🍬', categoria: 'Sobremesas', preco: 5.0 },
-        { nome: 'Bombom de Morango 🍬', categoria: 'Sobremesas', preco: 5.0 }
+        { nome: '🍍 Delícia de Abacaxi', categoria: 'Sobremesas', preco: 5.0 },
+        { nome: '🍓 Mousse de Morango', categoria: 'Sobremesas', preco: 5.0 },
+        { nome: '🍬 Bombom de Uva ', categoria: 'Sobremesas', preco: 5.0 },
+        { nome: '🍬 Bombom de Maracujá', categoria: 'Sobremesas', preco: 5.0 },
+        { nome: '🍬 Bombom de Limão', categoria: 'Sobremesas', preco: 5.0 },
+        { nome: '🍬 Bombom de Morango', categoria: 'Sobremesas', preco: 5.0 }
       ];
 
-      const cuponsValidos = {
-        "DESCONTO10": 0.10, 
-        "PROMO5": 0.05     
-      };
-
       let carrinho = {};
-      let cupomAtivo = null;
-      const taxaEntregaValor = 5.0;
 
       const cardapioEl = document.getElementById('cardapio');
       const filtroCategoriaEl = document.getElementById('filtroCategoria');
@@ -684,13 +659,33 @@
       const nomeClienteEl = document.getElementById('nomeCliente');
       const btnLimparCarrinho = document.getElementById('btnLimparCarrinho');
       const btnFinalizarCompra = document.getElementById('btnFinalizarCompra');
-      const btnAplicarCupom = document.getElementById('btnAplicarCupom');
-      const inputCupom = document.getElementById('inputCupom');
-      const taxaEntregaCheckbox = document.getElementById('taxaEntrega');
       const toggleThemeBtn = document.getElementById('toggleTheme');
-      const gerarPdfBtn = document.getElementById('gerarPdfBtn');
       const qrcodeCanvas = document.getElementById('qrcode');
       const btnEnviarWhatsapp = document.getElementById('btnEnviarWhatsapp');
+
+      const popupOverlay = document.getElementById('popupOverlay');
+      const popupMessage = document.getElementById('popupMessage');
+      const popupCloseBtn = document.getElementById('popupCloseBtn');
+
+      function abrirPopup(msg) {
+        popupMessage.textContent = msg;
+        popupOverlay.classList.add('active');
+        popupCloseBtn.focus();
+      }
+
+      function fecharPopup() {
+        popupOverlay.classList.remove('active');
+        buscaProdutoEl.focus();
+      }
+
+      popupCloseBtn.addEventListener('click', fecharPopup);
+      popupOverlay.addEventListener('click', (e) => {
+        if (e.target === popupOverlay) fecharPopup();
+      });
+
+      popupOverlay.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') fecharPopup();
+      });
 
       function agruparPorCategoria(produtos) {
         const categorias = {};
@@ -725,7 +720,7 @@
         });
 
         if (produtosFiltrados.length === 0) {
-          cardapioEl.innerHTML = `<p style="text-align:center; user-select:none;">😕 Nenhum produto encontrado.</p>`;
+          cardapioEl.innerHTML = `<p style="text-align:center; user-select:none;">Nenhum produto encontrado.</p>`;
           return;
         }
 
@@ -761,32 +756,17 @@
             btnAdicionar.title = `Adicionar ${prod.nome} ao carrinho`;
             btnAdicionar.addEventListener('click', () => {
               adicionarAoCarrinho(prod.nome);
-              mostrarMensagemAdicionado(card);
             });
-
-            const msgAdicionado = document.createElement('span');
-            msgAdicionado.className = 'added-message';
-            msgAdicionado.textContent = '✔️ Adicionado!';
 
             card.appendChild(nome);
             card.appendChild(preco);
             card.appendChild(btnAdicionar);
-            card.appendChild(msgAdicionado);
             grid.appendChild(card);
           });
 
           section.appendChild(grid);
           cardapioEl.appendChild(section);
         }
-      }
-
-      function mostrarMensagemAdicionado(card) {
-        const msg = card.querySelector('.added-message');
-        if (!msg) return;
-        msg.classList.add('show');
-        setTimeout(() => {
-          msg.classList.remove('show');
-        }, 1200);
       }
 
       function adicionarAoCarrinho(nomeProd) {
@@ -819,18 +799,8 @@
           if (!produto) continue;
           total += produto.preco * carrinho[nomeProd];
         }
-
-        if (cupomAtivo && cuponsValidos[cupomAtivo]) {
-          total = total * (1 - cuponsValidos[cupomAtivo]);
-        }
-
-        if (taxaEntregaCheckbox.checked) {
-          total += taxaEntregaValor;
-        }
-
         return total;
       }
-
 
       function atualizarCarrinho() {
         itensCarrinhoEl.innerHTML = '';
@@ -874,99 +844,23 @@
         totalValorEl.textContent = `(R$ ${totalCalculado.toFixed(2)})`;
       }
 
-      function aplicarCupom() {
-        const cupom = inputCupom.value.trim().toUpperCase();
-        if (!cupom) {
-          alert('Digite um cupom válido.');
-          return;
-        }
-        if (!cuponsValidos[cupom]) {
-          alert('Cupom inválido ou expirado.');
-          return;
-        }
-        cupomAtivo = cupom;
-        alert(`Cupom "${cupom}" aplicado com sucesso!`);
-        atualizarCarrinho();
-        inputCupom.value = '';
-      }
-
       function limparCarrinho() {
         if (!confirm('Tem certeza que deseja limpar o carrinho?')) return;
         carrinho = {};
-        cupomAtivo = null;
-        taxaEntregaCheckbox.checked = false;
-        inputCupom.value = '';
         atualizarCarrinho();
       }
 
       function finalizarCompra() {
         if (Object.keys(carrinho).length === 0) {
-          alert('Seu carrinho está vazio!');
+          abrirPopup('Seu carrinho está vazio!');
           return;
         }
         if (!nomeClienteEl.value.trim()) {
-          alert('Por favor, digite seu nome antes de finalizar.');
+          abrirPopup('Por favor, digite seu nome antes de finalizar.');
           nomeClienteEl.focus();
           return;
         }
-        alert(`Obrigado pela compra, ${nomeClienteEl.value.trim()}! Total: R$ ${calcularTotal().toFixed(2)}`);
-      }
-
-      async function gerarPDF() {
-        if (Object.keys(carrinho).length === 0) {
-          alert('Seu carrinho está vazio!');
-          return;
-        }
-        const {
-          jsPDF
-        } = window.jspdf;
-        const doc = new jsPDF();
-
-        doc.setFontSize(16);
-        doc.text('Pedido do Cardápio Digital', 14, 20);
-        doc.setFontSize(12);
-        doc.text(`Cliente: ${nomeClienteEl.value.trim() || 'Não informado'}`, 14, 30);
-
-        let yPos = 40;
-        doc.text('Itens:', 14, yPos);
-        yPos += 8;
-
-        for (const nomeProd in carrinho) {
-          const produto = produtos.find(p => p.nome === nomeProd);
-          const qtd = carrinho[nomeProd];
-          const line = `${qtd}x ${nomeProd} - R$ ${(produto.preco * qtd).toFixed(2)}`;
-          doc.text(line, 20, yPos);
-          yPos += 8;
-          if (yPos > 280) {
-            doc.addPage();
-            yPos = 20;
-          }
-        }
-
-        yPos += 8;
-        if (cupomAtivo) {
-          doc.text(`Cupom aplicado: ${cupomAtivo}`, 14, yPos);
-          yPos += 8;
-        }
-
-        if (taxaEntregaCheckbox.checked) {
-          doc.text(`Taxa de entrega: R$ ${taxaEntregaValor.toFixed(2)}`, 14, yPos);
-          yPos += 8;
-        }
-
-        doc.setFontSize(14);
-        doc.text(`Total: R$ ${calcularTotal().toFixed(2)}`, 14, yPos + 10);
-
-        doc.save('pedido_cardapio.pdf');
-      }
-
-      function toggleTema() {
-        document.body.classList.toggle('dark');
-        if (document.body.classList.contains('dark')) {
-          toggleThemeBtn.textContent = '🌞 Modo Claro';
-        } else {
-          toggleThemeBtn.textContent = '🌓 Modo Escuro';
-        }
+        abrirPopup(`Obrigado pela compra, ${nomeClienteEl.value.trim()}! Total: R$ ${calcularTotal().toFixed(2)}`);
       }
 
       function gerarQRCode() {
@@ -980,11 +874,11 @@
 
       function enviarViaWhatsapp() {
         if (Object.keys(carrinho).length === 0) {
-          alert('Seu carrinho está vazio.');
+          abrirPopup('Seu carrinho está vazio.');
           return;
         }
         if (!nomeClienteEl.value.trim()) {
-          alert('Por favor, digite seu nome antes de enviar.');
+          abrirPopup('Por favor, digite seu nome antes de enviar.');
           nomeClienteEl.focus();
           return;
         }
@@ -997,20 +891,12 @@
           mensagem += `- ${qtd}x ${nomeProd} - R$ ${(produto.preco * qtd).toFixed(2)}\n`;
         }
 
-        if (cupomAtivo) {
-          mensagem += `\n*Cupom aplicado:* ${cupomAtivo}\n`;
-        }
-
-        if (taxaEntregaCheckbox.checked) {
-          mensagem += `*Taxa de entrega:* R$ ${taxaEntregaValor.toFixed(2)}\n`;
-        }
-
         mensagem += `\n*Total:* R$ ${calcularTotal().toFixed(2)}\n\n📱 Enviado via Cardápio Digital`;
 
+        const numeroWhatsApp = '5581997554441';
 
-        const numeroWhatsApp = '';
         if (!numeroWhatsApp) {
-          alert('Número de WhatsApp não configurado. Por favor, configure o número no código.');
+          abrirPopup('Número de WhatsApp não configurado. Por favor, configure o número no código.');
           return;
         }
 
@@ -1018,15 +904,20 @@
         window.open(urlWhatsapp, '_blank');
       }
 
+      function toggleTema() {
+        document.body.classList.toggle('dark');
+        if (document.body.classList.contains('dark')) {
+          toggleThemeBtn.textContent = '🌞 Modo Claro';
+        } else {
+          toggleThemeBtn.textContent = '🌓 Modo Escuro';
+        }
+      }
 
       buscaProdutoEl.addEventListener('input', renderizarProdutos);
       filtroCategoriaEl.addEventListener('change', renderizarProdutos);
-      btnAplicarCupom.addEventListener('click', aplicarCupom);
       btnLimparCarrinho.addEventListener('click', limparCarrinho);
       btnFinalizarCompra.addEventListener('click', finalizarCompra);
-      taxaEntregaCheckbox.addEventListener('change', atualizarCarrinho);
       toggleThemeBtn.addEventListener('click', toggleTema);
-      gerarPdfBtn.addEventListener('click', gerarPDF);
       btnEnviarWhatsapp.addEventListener('click', enviarViaWhatsapp);
 
       popularCategorias();
